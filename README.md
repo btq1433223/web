@@ -38,4 +38,18 @@ XSS（跨站脚本）复现：
 
 <img width="274" height="43" alt="19b161939ae9236e0e9fe0f330492559" src="https://github.com/user-attachments/assets/aa6a86e1-989c-48ce-8587-e8ebea6e29b3" />
 
+再次输入 1' OR '1'='1，此时页面应该只会返回 ID 为 1 的结果，不再列出所有用户。
 
+<img width="425" height="157" alt="7090660147050d6fd41ffba4443feedf" src="https://github.com/user-attachments/assets/4d60c369-8600-4a9f-8e7f-facf70f1d9bc" />
+
+修复XSS（跨站脚本）：
+$html .= '<pre>Hello ' . $_GET[ 'name' ] . '</pre>';
+输入的 $_GET['name'] 直接拼接到了 HTML 中，没有任何过滤，导致浏览器会把它当成代码执行。
+将原来那行代码，替换成下面
+
+<img width="856" height="152" alt="625b978ffb5204bb57e0911a17f49f8c" src="https://github.com/user-attachments/assets/e92d23dd-1543-49b1-b7b3-ce9ea1518190" />
+
+回到网页刷新，输入 <script>alert('xss')</script>。
+你会发现弹窗没有了，页面上只会原样显示Hello <script>alert('xss')</script></pre> 这行字。
+
+<img width="563" height="117" alt="5c8f2036532783d1807e61e3deb68bf3" src="https://github.com/user-attachments/assets/a2983e61-c92a-4297-9cd2-f7038fe7cd88" />
