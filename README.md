@@ -53,3 +53,18 @@ $html .= '<pre>Hello ' . $_GET[ 'name' ] . '</pre>';
 你会发现弹窗没有了，页面上只会原样显示Hello <script>alert('xss')</script></pre> 这行字。
 
 <img width="563" height="117" alt="5c8f2036532783d1807e61e3deb68bf3" src="https://github.com/user-attachments/assets/a2983e61-c92a-4297-9cd2-f7038fe7cd88" />
+
+修复文件上传漏洞：
+$target_path = $target_path . basename( $_FILES[ 'uploaded' ][ 'name' ] );
+代码直接获取了用户上传的原始文件名，没有任何后缀和类型限制。如果上传 shell.php，它就会直接把 PHP 文件存进服务器的 hackable/uploads/ 目录，攻击者直接访问就能执行代码。
+修改后的完整代码
+
+<img width="1101" height="767" alt="6a50d0941e843928488944fd8ec77dd2" src="https://github.com/user-attachments/assets/00bf82a8-4fa7-4743-bd89-d28243298557" />
+
+回到网页，准备一个 1.php 上传，你会发现页面直接提示“文件格式不允许”。
+
+<img width="514" height="215" alt="5d74cce665291826fe2e00d50fe63171" src="https://github.com/user-attachments/assets/a3161943-5100-4835-994f-b4f22040fd08" />
+
+改传一张正常的 .jpg 图片，提示上传成功，修复完成！
+
+<img width="535" height="163" alt="image" src="https://github.com/user-attachments/assets/3f63e80c-146a-44bf-bbe8-664ea2b7972e" />
